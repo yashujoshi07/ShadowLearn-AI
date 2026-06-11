@@ -41,7 +41,19 @@ def generate_content(api_key, prompt, text):
         response = model.generate_content(full_prompt)
         return response.text
     except Exception as e:
-        return f"An error occurred: {e}"
+
+        error = str(e)
+
+        if "429" in error:
+            return """
+🚫 AI limit reached.
+
+Please wait 30 seconds and try again.
+
+Free Gemini accounts have request limits.
+"""
+
+        return f"Error: {error}"
 
 # --- SIDEBAR: SETUP & UPLOAD ---
 st.sidebar.title("⚙️ Setup & Upload")
@@ -60,9 +72,9 @@ if uploaded_file is not None:
             st.sidebar.success("Text extracted successfully!")
 
 # --- MAIN LAYOUT ---
-st.title("🚀 ShadowLearn AI")
-st.markdown(
-    "Transform PDFs into quizzes, flashcards, study plans, exam guides, and AI tutoring."
+st.title("ShadowLearn AI")
+st.caption(
+    "AI-powered study assistant for quizzes, flashcards, viva preparation and exam success."
 )
 # Create tabs for different features
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["📄 Extracted Notes", "📝 Quizzes", "🗂️ Flashcards", "📅 Study Plan", "💬 Ask Notes", "🎯 Exam Booster",  "🎤 Viva Questions"])
