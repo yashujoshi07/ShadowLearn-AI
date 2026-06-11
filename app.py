@@ -3,7 +3,35 @@ import PyPDF2
 import google.generativeai as genai
 
 # --- PAGE CONFIGURATION ---
-st.set_page_config(page_title="🚀 ShadowLearn AI", page_icon="📚", layout="wide")
+st.set_page_config(
+    page_title="🚀 ShadowLearn AI",
+    page_icon="📚",
+    layout="wide"
+)
+
+st.markdown("""
+<style>
+
+.stButton > button {
+    width: 100%;
+    border-radius: 15px;
+    height: 50px;
+    font-weight: bold;
+}
+
+.stDownloadButton > button {
+    width: 100%;
+    border-radius: 15px;
+}
+
+[data-testid="stMetric"] {
+    border: 1px solid #333;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+</style>
+""", unsafe_allow_html=True)
 
 # --- INITIALIZE SESSION STATE ---
 # We use session state to keep data from disappearing when Streamlit reruns
@@ -57,6 +85,18 @@ Free Gemini accounts have request limits.
 
 # --- SIDEBAR: SETUP & UPLOAD ---
 st.sidebar.title("⚙️ Setup & Upload")
+
+st.sidebar.success("🚀 ShadowLearn AI")
+
+st.sidebar.info("""
+1. Enter Gemini API Key
+
+2. Upload PDF
+
+3. Extract Text
+
+4. Generate Study Material
+""")
 api_key = st.sidebar.text_input("Enter Google Gemini API Key:", type="password")
 st.sidebar.markdown("[Get an API key here](https://aistudio.google.com/app/apikey)")
 
@@ -72,10 +112,24 @@ if uploaded_file is not None:
             st.sidebar.success("Text extracted successfully!")
 
 # --- MAIN LAYOUT ---
-st.title("ShadowLearn AI")
+st.title("🚀 ShadowLearn AI")
+
 st.caption(
-    "AI-powered study assistant for quizzes, flashcards, viva preparation and exam success."
+    "Turn PDF notes into quizzes, flashcards, viva questions and exam-ready study material."
 )
+
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.metric("Features", "7")
+
+with col2:
+    st.metric("AI Model", "Gemini")
+
+with col3:
+    st.metric("Status", "Live")
+
+st.divider()
 # Create tabs for different features
 tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs(["📄 Extracted Notes", "📝 Quizzes", "🗂️ Flashcards", "📅 Study Plan", "💬 Ask Notes", "🎯 Exam Booster",  "🎤 Viva Questions"])
 
