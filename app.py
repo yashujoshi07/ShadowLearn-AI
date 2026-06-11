@@ -12,22 +12,70 @@ st.set_page_config(
 st.markdown("""
 <style>
 
+/* Main Background */
+.stApp {
+    background: linear-gradient(
+        135deg,
+        #0f172a,
+        #1e293b,
+        #312e81
+    );
+}
+
+/* Headers */
+h1, h2, h3 {
+    color: #ffffff !important;
+}
+
+/* Caption Text */
+p {
+    color: #d1d5db;
+}
+
+/* Buttons */
 .stButton > button {
     width: 100%;
-    border-radius: 15px;
-    height: 50px;
+    height: 3rem;
+    border-radius: 12px;
+    border: none;
     font-weight: bold;
+    background: linear-gradient(
+        90deg,
+        #8b5cf6,
+        #ec4899
+    );
+    color: white;
 }
 
+/* Download Buttons */
 .stDownloadButton > button {
     width: 100%;
-    border-radius: 15px;
+    border-radius: 12px;
+    background: linear-gradient(
+        90deg,
+        #06b6d4,
+        #3b82f6
+    );
+    color: white;
 }
 
+/* Metric Cards */
 [data-testid="stMetric"] {
-    border: 1px solid #333;
-    padding: 15px;
+    background: rgba(255,255,255,0.08);
+    padding: 20px;
     border-radius: 15px;
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* Tabs */
+.stTabs [data-baseweb="tab"] {
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* Sidebar */
+section[data-testid="stSidebar"] {
+    background: #111827;
 }
 
 </style>
@@ -112,7 +160,18 @@ if uploaded_file is not None:
             st.sidebar.success("Text extracted successfully!")
 
 # --- MAIN LAYOUT ---
-st.title("🚀 ShadowLearn AI")
+st.markdown("""
+<h1 style='text-align:center;
+color:white;
+font-size:60px;'>
+🚀 ShadowLearn AI
+</h1>
+""", unsafe_allow_html=True)
+
+st.markdown(
+    "<p style='text-align:center;'>Your AI-Powered Study Companion</p>",
+    unsafe_allow_html=True
+)
 
 st.caption(
     "Turn PDF notes into quizzes, flashcards, viva questions and exam-ready study material."
