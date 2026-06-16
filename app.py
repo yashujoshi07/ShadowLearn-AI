@@ -130,6 +130,82 @@ Free Gemini accounts have request limits.
 """
 
         return f"Error: {error}"
+    
+def flip_card(front, back):
+
+    st.markdown(f"""
+    <style>
+    .flip-card {{
+      background-color: transparent;
+      width: 100%;
+      height: 220px;
+      perspective: 1000px;
+      margin-bottom: 20px;
+    }}
+
+    .flip-card-inner {{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+    }}
+
+    .flip-card:hover .flip-card-inner {{
+      transform: rotateY(180deg);
+    }}
+
+    .flip-card-front,
+    .flip-card-back {{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      font-weight: bold;
+    }}
+
+    .flip-card-front {{
+      background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+      );
+      color: white;
+    }}
+
+    .flip-card-back {{
+      background: linear-gradient(
+        135deg,
+        #0ea5e9,
+        #14b8a6
+      );
+      color: white;
+      transform: rotateY(180deg);
+    }}
+    </style>
+
+    <div class="flip-card">
+      <div class="flip-card-inner">
+
+        <div class="flip-card-front">
+          {front}
+        </div>
+
+        <div class="flip-card-back">
+          {back}
+        </div>
+
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True)
 
 # --- SIDEBAR: SETUP & UPLOAD ---
 st.sidebar.title("⚙️ Setup & Upload")
@@ -235,12 +311,53 @@ with tab3:
             st.warning("Please extract text from a PDF first.")
         else:
             with st.spinner("Generating flashcards..."):
-                prompt = "Create 10 essential flashcards based on the following text. Format them clearly as 'Front: [Concept/Question]' and 'Back: [Definition/Answer]'."
-                st.session_state.flashcard_data = generate_content(api_key, prompt, st.session_state.extracted_text)
-    
+
+                prompt = """
+                Generate exactly 10 flashcards from the notes.
+
+                Rules:
+
+                - Each flashcard must have one QUESTION and one ANSWER.
+                - Keep answers under 40 words.
+                - Focus on important concepts.
+                - Do NOT use markdown.
+                - Do NOT use bullet points.
+                - Do NOT use numbering.
+
+                Format EXACTLY like this:
+
+                QUESTION: What is Voltage?
+                ANSWER: Work done per unit charge.
+
+                QUESTION: What is Current?
+                ANSWER: Flow of electric charge.
+
+                QUESTION: What is Resistance?
+                ANSWER: Opposition to the flow of electric current.
+
+                Only return flashcards.
+                """
+
+                st.session_state.flashcard_data = generate_content(
+                    api_key,
+                    prompt,
+                    st.session_state.extracted_text
+                )
+                
     if st.session_state.flashcard_data:
 
-        st.markdown(st.session_state.flashcard_data)
+        cards = st.session_state.flashcard_data.split("QUESTION:")
+
+        for card in cards:
+
+            if "ANSWER:" in card:
+
+                front, back = card.split("ANSWER:")
+
+                flip_card(
+                    front.strip(),
+                    back.strip()
+                )
 
         st.download_button(
             "Download Flashcards",
